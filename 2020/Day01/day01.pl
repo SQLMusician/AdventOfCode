@@ -1,13 +1,12 @@
 #!/usr/bin/env perl
 
 use warnings;
+use strict;
 
 #
 # This line is needed to avoid getting warnings about the use of the ~~ smartmatch.
 #
 use experimental 'smartmatch';
-use strict;
-use Data::Dumper;
 
 my @data1 = ();
 my @data2 = ();
