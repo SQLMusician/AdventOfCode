@@ -3,45 +3,20 @@
 
 int main() {
 
-  int data
-    FILE *myFile;
-    myFile = fopen("data.txt", "r");
+  FILE *myFile;
+  int i;
+  char *data[1000][50];
 
-    //read file into array
-    int data[1000];
+  myFile = fopen("data.txt", "r");
 
-    for (i = 0; i < 200; i++)
-    {
-        fscanf(myFile, "%d", &ArrayA[i]);
-        ArrayB[i] = ArrayA[i]; 
-        ArrayC[i] = ArrayA[i];
-    }
+  for (i = 0; i < 200; i++)
+  {
+    fgets(&data[i], 50, myFile);
+  }
 
-    fclose(myFile);
+  fclose(myFile);
 
-    for (i=0; i<200; i++) {
-      for (x=0; x<200; x++) {
-        sum = ArrayA[i] + ArrayB[x];
-        if (sum == 2020) {
-          mult = ArrayA[i] * ArrayB[x];
-          break;
-        }
-      }
-    }
-
-    printf ("Part 1: %d\n", mult);
-     
-    for (i=0; i<200; i++) {
-      for (x=0; x<200; x++) {
-        for (y=0; y<200; y++) {
-          sum = ArrayA[i] + ArrayB[x] + ArrayC[y];
-          if (sum == 2020) {
-            mult = ArrayA[i] * ArrayB[x] * ArrayC[y];
-            break;
-          }
-        }
-      }
-    }
-
-    printf ("Part 2: %d\n", mult);
+  for (i=0; i < 1000; i++) {
+    printf ("Line %d: %s\n", i, data[i]);
+  }
 }
