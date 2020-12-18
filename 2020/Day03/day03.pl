@@ -18,6 +18,7 @@ while ($loop < $count) {
   for ($i=0; $i < 4; $i++) {
     $lines[$loop] = "$lines[$loop]$lines[$loop]";
   }
+  print $lines[$loop];
   $loop++;
 }
 

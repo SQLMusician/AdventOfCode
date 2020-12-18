@@ -1,16 +1,14 @@
 #include <stdio.h>
+#include <regex.h>
 
-void main() {
+int main() {
 
+  int data
     FILE *myFile;
     myFile = fopen("data.txt", "r");
 
     //read file into array
-    int ArrayA[201];
-    int ArrayB[201];
-    int ArrayC[201];
-    int i, x, y;
-    int sum, mult;
+    int data[1000];
 
     for (i = 0; i < 200; i++)
     {
