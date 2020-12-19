@@ -16,7 +16,6 @@ foreach my $item (@data) {
 
   $r =~ s/-/,/; 
   $s =~ s/://;
-  my $z = "$s\{$r\}\$";
   my @range = split (',', $r);
 
   my $count = () = $p =~ /$s/g;
@@ -40,7 +39,6 @@ foreach my $item (@data) {
   $s =~ s/://;
   my @range = split (',', $r);
 
-  my $count = () = $p =~ /$s/g;
   my $low = $range[0];
   my $high = $range[1];
   my $charlow = substr($p, $low-1, 1);
