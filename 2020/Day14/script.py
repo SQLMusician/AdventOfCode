@@ -13,7 +13,7 @@ def get_mask_idx(mask):
             mask_vals.append((idx, val))
     return mask_vals
 
-with open('input.txt') as file:
+with open('data.txt') as file:
     mask = ''
     mems = []
     for line in file:

@@ -23,7 +23,7 @@ def get_mask_idx(mask):
     return mask_1s, mask_xs
 
 
-with open('input.txt') as file:
+with open('data.txt') as file:
     mask = ''
     mems = []
     for line in file:
