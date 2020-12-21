@@ -1,4 +1,4 @@
-hcl:5d90f0 cid:270 ecl:#66dc9c hgt:62cm byr:1945 pid:63201172 eyr:2026
+cl:5d90f0 cid:270 ecl:#66dc9c hgt:62cm byr:1945 pid:63201172 eyr:2026
 ecl:amb byr:1943 iyr:2014 eyr:2028 pid:333051831
 byr:1971 eyr:2021 iyr:2015 pid:158388040 hcl:#18171d ecl:brn hgt:179cm
 byr:1936 pid:707057570 iyr:2014 ecl:amb cid:299 eyr:2030 hcl:#c0946f hgt:186cm
