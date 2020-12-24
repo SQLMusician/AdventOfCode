@@ -1,7 +1,0 @@
-#!/usr/bin/bash
-
-gcc -o formck main.c -g -lm -g -std=c99 -pedantic
-
-if [ $? -eq 0 ]; then
-   ./formck data.txt
-fi

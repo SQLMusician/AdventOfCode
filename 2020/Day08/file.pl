@@ -18,7 +18,7 @@ $count = @list;
 
 foreach my $line (@list) {
   (my $inst, my $opc) = split(/\s+/, $line);
-  push(@biglist, ($inst, int($opc));
+  push(@biglist, ($inst, int($opc)));
 }
 
 print Dumper(@biglist);
