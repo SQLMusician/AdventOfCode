@@ -1,11 +1,15 @@
+//
+//  main.c
+//  day02
+//
+//  Created by Douglas Denney on 12/5/21.
+//
+
 #include <stdio.h>
 
 int main() {
 
     FILE *myFile;
-    myFile = fopen("input.txt", "r");
-
-    //read file into array
     char inst[10];
     int value;
     int hp = 0;
@@ -16,6 +20,12 @@ int main() {
     int aim = 0;
     int debug = 0;
 
+    myFile = fopen("/Users/doug/GitHub/AdventOfCode/2021/day02/day02/input.txt", "r");
+    if (myFile == NULL) {
+        perror("Error");
+        return 1;
+    }
+    
     while(fscanf(myFile, "%s %d", &inst[0], &value)!= EOF) {
       switch( inst[0] )
       {
@@ -41,6 +51,6 @@ int main() {
 
     fclose(myFile);
 
-    printf ("Part 1: horizontal position: %d; depth: %d; product=%d\n", hp, depth, hp*depth);
-    printf ("Part 2: horizontal position: %d; depth: %d; product=%d\n", P2hp, P2depth, P2hp*P2depth);
+    printf ("Part 1: horizontal position: %d; depth: %d; p*d=%d\n", hp, depth, hp*depth);
+    printf ("Part 2: horizontal position: %d; depth: %d; p*d=%d\n", P2hp, P2depth, P2hp*P2depth);
 }

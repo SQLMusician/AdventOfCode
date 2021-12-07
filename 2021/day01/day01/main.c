@@ -1,20 +1,28 @@
+//
+//  main.c
+//  day01
+//
+//  Created by Douglas Denney on 12/5/21.
+//
+
 #include <stdio.h>
 
 int main() {
 
     FILE *myFile;
-    myFile = fopen("input.txt", "r");
-
-    //read file into array
     int A[2001];
     int B[2001];
     int increase = 0;
     int i, tot;
     int debug = 0;
-
     i = 0;
     tot = 0;
-
+    
+    myFile = fopen("/Users/doug/GitHub/AdventOfCode/2021/day01/day01/input.txt", "r");
+    if (myFile == NULL) {
+        perror("Error");
+        return 1;
+    }
     while(fscanf(myFile, "%d", &A[i])!= EOF) {
       i++;
     }
