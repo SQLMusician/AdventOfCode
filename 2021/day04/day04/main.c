@@ -25,7 +25,7 @@ int main(void) {
     int i, num;
     int linelen = 0;
     char *ptr;
-    char filename[] = "/Users/doug/GitHub/AdventOfCode/2021/day04/day04/input.txt";
+    char filename[] = "/Users/doug/GitHub/AdventOfCode/2021/day04/input.txt";
     
     myFile = malloc(sizeof(rawFile));
 
