@@ -9,10 +9,7 @@ import Cocoa
 
 var p1score: Int = 0
 var p2score: Int = 0
-var mod: Int = 1
-var str1: String = ""
-var str2: String = ""
-var str3: String = ""
+var linecount: Int = 0
 
 // get URL to the the documents directory in the sandbox
 let home = FileManager.default.homeDirectoryForCurrentUser
@@ -53,64 +50,39 @@ var lineCap: Int = 0
 
 // initial iteration
 var bytesRead = getline(&lineByteArrayPointer, &lineCap, filePointer)
-
+linecount += 1
 while (bytesRead > 0) {
     
     // note: this translates the sequence of bytes to a string using UTF-8 interpretation
     let lineAsString = String.init(cString:lineByteArrayPointer!).trimmingCharacters(in: .newlines)
-    if (mod % 3 == 1) {
-        str1 = lineAsString
-    }
-    if (mod % 3 == 2) {
-        str2 = lineAsString
-    }
-    if (mod % 3 == 0) {
-        str3 = lineAsString
-        for c in str1 {
-            if str2.contains(c) && str3.contains(c) {
-                //print("ELFBADGES: The magic letter is \(c) for the values //\(str1) and \(str2) and \(str3)")
-                if c.asciiValue! > 96 {
-                    p2score = p2score + Int(c.asciiValue!)-96
-                }
-                else {
-                    p2score = p2score + Int(c.asciiValue!)-64+26
-                }
-                break
-            }
-        }
-    }
-    mod = mod + 1
-    //print ("lineAsString = \(lineAsString)")
-
-    let halfLength = lineAsString.count / 2
-
-    let index = lineAsString.index(lineAsString.startIndex, offsetBy: halfLength)
-    let beginning = lineAsString[..<index]
-    let end = lineAsString[index...]
-    //print ("beginning = \(beginning), count=\(beginning.count)")
-    //print ("end = \(end), count=\(end.count)")
     
-    for char in beginning {
-        if end.contains(char) {
-            //print("Found \(char), \(String(describing: char.asciiValue))")
-            if char.asciiValue! > 96 {
-                //print("Value=\(char.asciiValue!-96)")
-                p1score = p1score + Int(char.asciiValue!)-96
-            }
-            else {
-                //print("Value=\(char.asciiValue!-64+26)")
-                p1score = p1score + Int(char.asciiValue!)-64+26
-            }
-            break
+    let assignments = lineAsString.components(separatedBy: ",")
+    let range1 = assignments.first!.components(separatedBy: "-")
+    let range2 = assignments.last!.components(separatedBy: "-")
+    
+    if (range1.first! as NSString).integerValue >= (range2.first! as NSString).integerValue && (range1.last! as NSString).integerValue <= (range2.last! as NSString).integerValue {
+        p1score += 1
+    } else {
+        if (range2.first! as NSString).integerValue >= (range1.first! as NSString).integerValue && (range2.last! as NSString).integerValue <= (range1.last! as NSString).integerValue {
+            p1score += 1
         }
     }
-
-    //print("==========================")
+    
+    // find all the rows where there is no overlap
+    if (range1.last! as NSString).integerValue < (range2.first! as NSString).integerValue || (range1.first! as NSString).integerValue > (range2.last! as NSString).integerValue {
+        p2score += 1
+    }
     // updates number of bytes read, for the next iteration
     bytesRead = getline(&lineByteArrayPointer, &lineCap, filePointer)
+    linecount += 1
 }
 
 print ("p1score = \(p1score)")
+print ("linecount = \(linecount)")
+// p2score is found by find all rows where there is no overlap at all
+// and then subtracting that from the total number of rows in the data
+// set, which is 1000.
 print ("p2score = \(p2score)")
+print ("linecount - p2score -1 = \(linecount - p2score - 1)")
 
 
