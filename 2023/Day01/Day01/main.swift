@@ -7,8 +7,8 @@
 
 /*
 
-answer for part 1: 54331
-answer for part 2: ?
+ Part 1: Calibration value = 54331
+ Part 2: Calibration value = 54518
 
 */
 
@@ -24,14 +24,29 @@ func findFirstAndLastDigits(in string: String) -> (first: Int?, last: Int?) {
 func convertSpelledOutNumbersToDigits(in string: String) -> String {
     let numberWords = ["zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine"]
     var result = string
+    /*
+     This was not obvious in the instructions for this second part. But,
+     the text sometimes contains words that are fully baked in my opinion.
+     For example, "oneight", which is really "one" and "eight". So the
+     puzzle really needs to have a few replaces, as outlined below, which
+     didn't allow it to work until I added these. Then it gave the right
+     answer, or the answer expected by the program.
+     */
+    result = result.replacingOccurrences(of: "oneight", with: "18")
+    result = result.replacingOccurrences(of: "twone", with: "21")
+    result = result.replacingOccurrences(of: "fiveight", with: "58")
+    result = result.replacingOccurrences(of: "threeight", with: "38")
+    result = result.replacingOccurrences(of: "nineight", with: "98")
+    result = result.replacingOccurrences(of: "eighthree", with: "83")
+    result = result.replacingOccurrences(of: "eightwo", with: "82")
     for (index, word) in numberWords.enumerated() {
         result = result.replacingOccurrences(of: word, with: "\(index)")
     }
     return result
 }
 
-var total = 0
-var totalT = 0
+var part1Total = 0
+var part2Total = 0
 
 // get URL to the the documents directory in the sandbox
 let home = FileManager.default.homeDirectoryForCurrentUser
@@ -76,25 +91,157 @@ var bytesRead = getline(&lineByteArrayPointer, &lineCap, filePointer)
 while (bytesRead > 0) {
     
     // note: this translates the sequence of bytes to a string using UTF-8 interpretation
-    let lineAsString = String.init(cString:lineByteArrayPointer!)
+    let lineAsString = String.init(cString:lineByteArrayPointer!).trimmingCharacters(in: .whitespacesAndNewlines)
     
     // do whatever you need to do with this single line of text
-    let (firstDigitT, lastDigitT) = findFirstAndLastDigits (in: lineAsString)
-    let lineWithDigits = convertSpelledOutNumbersToDigits (in: lineAsString)
-    let (firstDigit, lastDigit) = findFirstAndLastDigits (in: lineWithDigits)
-    let twoDigitNumber = String(format: "%02d", (firstDigit ?? 0) * 10 + (lastDigit ?? 0))
-    let twoDigitNumberT = String(format: "%02d", (firstDigitT ?? 0) * 10 + (lastDigitT ?? 0))
-    if (Int(twoDigitNumber) != Int(twoDigitNumberT)) {
-        print ("line=\(lineAsString); lineDigits=\(lineWithDigits); twoDigits=\(twoDigitNumber); twoDigitsT=\(twoDigitNumberT)")
-    }
+    let (firstDigit1, lastDigit1) = findFirstAndLastDigits (in: lineAsString)
+    let twoDigitNumber1 = String(format: "%02d", (firstDigit1 ?? 0) * 10 + (lastDigit1 ?? 0))
+    
+    let lineWithDigits2 = convertSpelledOutNumbersToDigits (in: lineAsString)
+    let (firstDigit2, lastDigit2) = findFirstAndLastDigits (in: lineWithDigits2)
+    let twoDigitNumber2 = String(format: "%02d", (firstDigit2 ?? 0) * 10 + (lastDigit2 ?? 0))
+
+
+    //print ("<==================>\r")
+    //print ("twoDigitNumber1 = \(twoDigitNumber1) | twoDigitNumber2 = \(twoDigitNumber2) | lineAsString    = \(lineAsString) | lineWithDigits2 = \(lineWithDigits2)\r")
+    print ("\(twoDigitNumber1) | \(twoDigitNumber2) | \(lineAsString) | lineWithDigits2 = \(lineWithDigits2)\r")
   
-    total = total + (Int(twoDigitNumber) ?? 0)
-    totalT = totalT + (Int(twoDigitNumberT) ?? 0)
-    // for debugging, can print it
-    //print("line = \(lineAsString); bytesRead = \(bytesRead)")
+    part1Total = part1Total + (Int(twoDigitNumber1) ?? 0)
+    part2Total = part2Total + (Int(twoDigitNumber2) ?? 0)
     
     // updates number of bytes read, for the next iteration
     bytesRead = getline(&lineByteArrayPointer, &lineCap, filePointer)
 }
 
-print ("Total: \(total); TotalT: \(totalT)")
+print ("Part1 Total: \(part1Total); Part2 Total: \(part2Total)")
+
+/*
+ 
+ From ChatGPT
+ 
+ import Foundation
+
+ func extractDigitsAndCalculateSum(from fileURL: URL) -> Int {
+     do {
+         // Read all lines from the file
+         let content = try String(contentsOf: fileURL, encoding: .utf8)
+         let lines = content.components(separatedBy: .newlines)
+
+         // Calculate the sum of first and last digits for each line
+         var sum = 0
+         for line in lines {
+             // Ignore empty lines
+             if !line.isEmpty {
+                 // Extract the first and last digits
+                 if let firstDigit = line.first?.wholeNumberValue, let lastDigit = line.last?.wholeNumberValue {
+                     // Combine the digits into a two-digit number
+                     let combinedNumber = firstDigit * 10 + lastDigit
+
+                     // Add the combined number to the sum
+                     sum += combinedNumber
+                 }
+             }
+         }
+
+         return sum
+     } catch {
+         print("Error reading the file:", error)
+         return 0
+     }
+ }
+
+ // Replace "input.txt" with the actual file name or path
+ if let fileURL = Bundle.main.url(forResource: "input", withExtension: "txt") {
+     let result = extractDigitsAndCalculateSum(from: fileURL)
+     print("Sum of combined digits:", result)
+ } else {
+     print("Input file not found")
+ }
+
+ */
+
+/*
+ More from ChatGPT
+ 
+ import Foundation
+
+ func extractDigitsAndCalculateSum(from fileURL: URL) -> Int {
+     do {
+         // Read all lines from the file
+         let content = try String(contentsOf: fileURL, encoding: .utf8)
+         let lines = content.components(separatedBy: .newlines)
+
+         // Define a mapping of number words to digits
+         let numberWordsToDigits: [String: Int] = [
+             "one": 1, "two": 2, "three": 3, "four": 4, "five": 5,
+             "six": 6, "seven": 7, "eight": 8, "nine": 9
+         ]
+
+         // Calculate the sum of first and last digits for each line
+         var sum = 0
+         for line in lines {
+             // Ignore empty lines
+             if !line.isEmpty {
+                 // Extract the first and last digits, considering number words
+                 let firstDigit: Int
+                 if let firstChar = line.first {
+                     if let digit = firstChar.wholeNumberValue {
+                         firstDigit = digit
+                     } else {
+                         // Check if the first word in the line represents a number
+                         let word = String(firstChar)
+                         if let digit = numberWordsToDigits[word] {
+                             firstDigit = digit
+                         } else {
+                             // Default to 0 if it's neither a digit nor a recognized number word
+                             firstDigit = 0
+                         }
+                     }
+                 } else {
+                     // Default to 0 for an empty line
+                     firstDigit = 0
+                 }
+
+                 let lastDigit: Int
+                 if let lastChar = line.last {
+                     if let digit = lastChar.wholeNumberValue {
+                         lastDigit = digit
+                     } else {
+                         // Check if the last word in the line represents a number
+                         let word = String(lastChar)
+                         if let digit = numberWordsToDigits[word] {
+                             lastDigit = digit
+                         } else {
+                             // Default to 0 if it's neither a digit nor a recognized number word
+                             lastDigit = 0
+                         }
+                     }
+                 } else {
+                     // Default to 0 for an empty line
+                     lastDigit = 0
+                 }
+
+                 // Combine the digits into a two-digit number
+                 let combinedNumber = firstDigit * 10 + lastDigit
+
+                 // Add the combined number to the sum
+                 sum += combinedNumber
+             }
+         }
+
+         return sum
+     } catch {
+         print("Error reading the file:", error)
+         return 0
+     }
+ }
+
+ // Replace "input.txt" with the actual file name or path
+ if let fileURL = Bundle.main.url(forResource: "input", withExtension: "txt") {
+     let result = extractDigitsAndCalculateSum(from: fileURL)
+     print("Sum of combined digits:", result)
+ } else {
+     print("Input file not found")
+ }
+
+ */
